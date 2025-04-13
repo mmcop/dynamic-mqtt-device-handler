@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_DEFAULT_ACCOUNT.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+      - docker build -f services/user_device_connection_permission_service/$DOCKERFILE --build-arg RABBITMQ_HOST=$RABBITMQ_HOST --build-arg RABBITMQ_USER=$RABBITMQ_USER --build-arg RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD  --build-arg RABBITMQ_VHOST=$RABBITMQ_VHOST --build-arg ELASTICSEARCH_HOST=$ELASTICSEARCH_HOST --build-arg ELASTICSEARCH_CONNECTION=$ELASTICSEARCH_CONNECTION --build-arg ELASTICSEARCH_PORT=$ELASTICSEARCH_PORT --build-arg DATABASE_HOST=$DATABASE_HOST --build-arg DATABASE_USERNAME=$DATABASE_USERNAME --build-arg DATABASE_NAME=$DATABASE_NAME --build-arg DATABASE_PASSWORD=$DATABASE_PASSWORD --build-arg DEVICE_MQTT_SERVICE_URL=$DEVICE_MQTT_SERVICE_URL --build-arg API_KEY=$API_KEY -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_DEFAULT_ACCOUNT.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image to ECR...
+      - docker push $AWS_DEFAULT_ACCOUNT.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
