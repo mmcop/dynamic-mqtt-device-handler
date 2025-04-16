@@ -67,9 +67,9 @@ Bu servis, cihaz mesajlarını işler ve veritabanında saklar.
 - Thread havuzları ile paralel mesaj işleme
 - Elasticsearch entegrasyonu ile gelişmiş log takibi
 
-### Device Alarm Service
+### Device Alarm Service (Geliştirme Aşamasında)
 
-Bu servis, cihaz verilerini izler ve yapılandırılabilir kurallara göre alarmlar tetikler.
+Bu servis, cihaz verilerini izler ve yapılandırılabilir kurallara göre alarmlar tetikler. **Not: Bu servis halen aktif geliştirme aşamasındadır ve tam fonksiyonel değildir.**
 
 **Yetenekler:**
 - Karmaşık mantık ile alarm kuralları tanımlama ve değerlendirme
@@ -285,35 +285,6 @@ docker run -d --name device_message_handler_service \
   device_message_handler_service
 ```
 
-#### Device Alarm Service
-
-```bash
-# Image oluşturma
-docker build -t device_alarm_service -f ./services/device_alarm_service/Dockerfile .
-
-# Container çalıştırma
-docker run -d --name device_alarm_service \
-  -e API_KEY=your_api_key \
-  -e DATABASE_HOST=your_db_host \
-  -e DATABASE_NAME=your_db_name \
-  -e DATABASE_PASSWORD=your_password \
-  -e DATABASE_USERNAME=your_username \
-  -e ELASTICSEARCH_CONNECTION=False \
-  -e ELASTICSEARCH_HOST=your_es_host \
-  -e ELASTICSEARCH_PORT=9200 \
-  -e QUEUE_NAME=mm_device_data_alarm_queue \
-  -e RABBITMQ_HOST=your_rabbitmq_host \
-  -e RABBITMQ_PASSWORD=your_rabbitmq_password \
-  -e RABBITMQ_USER=your_rabbitmq_user \
-  device_alarm_service
-```
-
-Alternatif olarak, Docker Compose ile tüm servisleri birlikte oluşturup çalıştırabilirsiniz:
-
-```bash
-docker-compose up --build
-```
-
 ### Manuel Kurulum
 
 1. Depoyu klonlayın
@@ -321,7 +292,6 @@ docker-compose up --build
    ```bash
    pip install -r services/device_gateway_service/requirements.txt
    pip install -r services/device_message_handler_service/requirements.txt
-   pip install -r services/device_alarm_service/requirements.txt
    pip install -r services/user_device_connection_permission_service/requirements.txt
    ```
 3. Gerektiği gibi ortam değişkenlerini yapılandırın
@@ -329,7 +299,6 @@ docker-compose up --build
    ```bash
    python -m services.device_gateway_service.main
    python -m services.device_message_handler_service.main
-   python -m services.device_alarm_service.main
    python -m services.user_device_connection_permission_service.main
    ```
 
