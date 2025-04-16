@@ -7,7 +7,7 @@ Kapsamlı, mikroservis tabanlı bir IoT cihaz yönetim platformu. Cihaz bağlant
 Platform dört ana mikroservisten oluşmaktadır:
 
 1. **User Device Connection Permission Service** - Kullanıcı oluşturma ve izinlerini yönetir
-2. **Device Gateway Service** - MQTT bağlantılarını ve konu aboneliklerini işler
+2. **Device Gateway Service** - MQTT bağlantılarını ve MQTT topic aboneliklerini işler
 3. **Device Message Handler Service** - Cihaz mesajlarını işler ve depolar
 4. **Device Alarm Service** - Cihaz verilerini izler ve kurallara göre alarmlar tetikler
 
